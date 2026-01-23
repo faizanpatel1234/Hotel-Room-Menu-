@@ -10,375 +10,732 @@
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Lato:wght@300;400;700&display=swap');
 
         :root {
-            /* Branding Colors */
             --brand-gold: #C5A059; 
-            --brand-gold-light: #e6d3a3;
+            --brand-gold-dark: #9e7f43;
             --brand-black: #1a1a1a;
             --brand-dark-gray: #333333;
-            --bg-cream: #faf9f6;
+            --bg-cream: #fdfbf7;
         }
 
         body {
             font-family: 'Lato', sans-serif;
             background-color: var(--bg-cream);
             color: var(--brand-dark-gray);
-            /* Safe area padding for iPhone Home bar */
-            padding-bottom: env(safe-area-inset-bottom, 40px); 
+            padding-bottom: 90px;
             -webkit-tap-highlight-color: transparent;
+            scroll-behavior: smooth;
         }
 
         .font-serif { font-family: 'Playfair Display', serif; }
 
-        /* Hide Scrollbar but allow scrolling */
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-        /* Category Buttons */
-        .category-btn {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            font-family: 'Playfair Display', serif;
-            letter-spacing: 0.5px;
-            border: 1px solid transparent;
+        /* --- LOADING SCREEN --- */
+        #appLoader {
+            position: fixed;
+            inset: 0;
+            background-color: #1a1a1a;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.6s ease-out, visibility 0.6s;
         }
+        .loader-logo {
+            font-family: 'Playfair Display', serif;
+            color: var(--brand-gold);
+            font-size: 2.5rem;
+            font-weight: 700;
+            animation: pulseGold 2s infinite;
+        }
+        .loader-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(197, 160, 89, 0.3);
+            border-top-color: var(--brand-gold);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-top: 20px;
+        }
+
+        /* --- CONTROLS --- */
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #16a34a;
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #16a34a;
+        }
+        
+        /* --- NAVIGATION --- */
+        nav {
+            /* Better glass effect */
+            background: rgba(253, 251, 247, 0.85); 
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(197, 160, 89, 0.15);
+        }
+
+        .category-btn {
+            transition: all 0.3s ease;
+            font-family: 'Lato', sans-serif;
+            font-weight: 500;
+            font-size: 0.9rem;
+            letter-spacing: 0.3px;
+            /* No border for cleaner look */
+            border: 1px solid transparent; 
+            background: transparent;
+            box-sizing: border-box;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            position: relative;
+            color: #666;
+            padding: 8px 16px;
+            border-radius: 100px;
+            white-space: nowrap;
+        }
+        
+        /* Active State - High Contrast, Fixed Size */
         .category-btn.active {
             background-color: var(--brand-black);
             color: var(--brand-gold);
-            border-color: var(--brand-black);
-            transform: scale(1.05);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
-        /* Food Type Icons (Veg/Non-Veg) */
-        .food-icon {
-            width: 14px; height: 14px;
+        /* --- ICONS --- */
+        .veg-icon-box, .nonveg-icon-box, .egg-icon-box {
             border: 1px solid;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 8px;
-            flex-shrink: 0;
-            margin-top: 4px;
-            border-radius: 2px;
+            padding: 2px;
+            width: 14px; height: 14px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 3px;
         }
-        .veg { border-color: #16a34a; color: #16a34a; }
-        .non-veg { border-color: #dc2626; color: #dc2626; }
-        .egg { border-color: #ca8a04; color: #ca8a04; }
+        .veg-dot, .nonveg-dot, .egg-dot { width: 6px; height: 6px; border-radius: 50%; }
+        
+        .veg-icon-box { border-color: #16a34a; } .veg-dot { background-color: #16a34a; }
+        .nonveg-icon-box { border-color: #dc2626; } .nonveg-dot { background-color: #dc2626; }
+        .egg-icon-box { border-color: #ca8a04; } .egg-dot { background-color: #ca8a04; }
 
-        /* Card Styling */
+        /* --- CARD STYLING --- */
         .menu-card {
             background: white;
-            border: 1px solid #e5e7eb;
-            transition: all 0.2s ease;
-            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0,0,0,0.03);
+            transition: transform 0.1s ease;
+            box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+            border-radius: 18px;
+            position: relative;
         }
-        .menu-card:active {
-            transform: scale(0.98);
-            background-color: #fcfcfc;
-        }
+        .menu-card:active { transform: scale(0.98); }
 
         .kcal-badge {
             font-size: 0.65rem;
-            background-color: #f3f4f6;
-            color: #6b7280;
-            padding: 2px 6px;
-            border-radius: 4px;
+            background-color: #fff7ed;
+            color: #c2410c;
+            padding: 2px 8px;
+            border-radius: 12px;
             display: inline-flex;
             align-items: center;
-            gap: 3px;
-            margin-top: 4px;
+            gap: 4px;
+            margin-top: 6px;
+            font-weight: 600;
+            border: 1px solid #ffedd5;
         }
+
+        .bestseller-badge {
+            position: absolute;
+            top: -8px;
+            right: 12px;
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            color: #fff;
+            font-size: 0.6rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            padding: 2px 8px;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+            letter-spacing: 0.5px;
+            z-index: 10;
+        }
+
+        .spicy-icon { color: #ef4444; font-size: 0.8rem; margin-left: 6px; }
+        .like-btn { color: #d1d5db; transition: color 0.2s; }
+        .like-btn.liked { color: #ec4899; }
         
-        /* Fade Animation for menu items */
-        .fade-in {
-            animation: fadeIn 0.4s ease-in-out;
-        }
+        .fade-in { animation: fadeIn 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); }
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(15px); }
             to { opacity: 1; transform: translateY(0); }
         }
+
+        .text-gold-gradient {
+            background: linear-gradient(to right, #F9EFAF, #C5A059, #8C6A28);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-size: 200% auto;
+            animation: shine 4s linear infinite;
+        }
+        @keyframes shine { to { background-position: 200% center; } }
+        @keyframes pulseGold {
+            0%, 100% { opacity: 1; text-shadow: 0 0 10px rgba(197, 160, 89, 0.5); }
+            50% { opacity: 0.8; text-shadow: 0 0 2px rgba(197, 160, 89, 0.2); }
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* --- HOTEL INFO --- */
+        .hotel-hero {
+            background: linear-gradient(145deg, #1a1a1a, #0f0f0f);
+            color: white;
+            padding: 40px 20px 60px;
+            border-radius: 0 0 40px 40px;
+            text-align: center;
+            margin-bottom: -40px; 
+            box-shadow: 0 20px 40px -10px rgba(0,0,0,0.5);
+            position: relative;
+            z-index: 10;
+            overflow: hidden;
+        }
+        .hotel-hero::after {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: radial-gradient(circle at 50% 10%, rgba(197, 160, 89, 0.1) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 24px;
+            position: relative;
+            z-index: 20;
+            padding: 0 10px;
+        }
+        
+        .action-btn {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.8);
+            border-radius: 18px;
+            padding: 16px 8px;
+            text-align: center;
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .action-btn:active { transform: scale(0.96); }
+        .action-icon { font-size: 1.4rem; color: var(--brand-gold); margin-bottom: 8px; display: block; }
+        
+        .section-heading {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            color: #1a1a1a;
+            font-size: 1.25rem;
+            margin-bottom: 16px;
+            position: relative;
+            padding-left: 16px;
+            display: flex;
+            align-items: center;
+        }
+        .section-heading::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            height: 70%;
+            width: 4px;
+            background-color: var(--brand-gold);
+            border-radius: 2px;
+        }
+
+        .facility-item {
+            background: white;
+            border: 1px solid #f3f4f6;
+            border-radius: 12px;
+            padding: 14px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            transition: transform 0.2s;
+        }
+        .facility-item:active { transform: scale(0.98); }
+
+        .highlights-scroll {
+            display: flex;
+            overflow-x: auto;
+            gap: 12px;
+            padding: 4px 10px 16px;
+            margin-bottom: 10px;
+        }
+        .highlight-pill {
+            flex: 0 0 auto;
+            background: white;
+            border: 1px solid #e5e7eb;
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+        }
+        .highlight-pill i { color: var(--brand-gold); }
+
+        .landmark-card {
+            background: white;
+            border: 1px solid #f3f4f6;
+            border-radius: 16px;
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+        }
+        .dist-badge {
+            background-color: #fff9e6;
+            color: #9e7f43;
+            font-weight: 700;
+            font-size: 0.7rem;
+            padding: 4px 8px;
+            border-radius: 6px;
+            border: 1px solid #ffeeba;
+            min-width: 60px;
+            text-align: center;
+        }
+
+        .book-cta {
+            background: linear-gradient(135deg, var(--brand-gold) 0%, var(--brand-gold-dark) 100%);
+            color: white;
+            text-align: center;
+            padding: 16px;
+            border-radius: 16px;
+            font-weight: 700;
+            box-shadow: 0 8px 20px -4px rgba(197, 160, 89, 0.4);
+            margin: 0 10px 24px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            transition: transform 0.2s;
+        }
+        .book-cta:active { transform: scale(0.98); }
+
+        /* Floating Buttons */
+        .fab-container { position: fixed; bottom: 24px; right: 24px; display: flex; flex-direction: column; gap: 12px; z-index: 50; }
+        .fab-btn { width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(0,0,0,0.25); transition: transform 0.2s; color: white; }
+        .fab-btn:active { transform: scale(0.9); }
+        .fab-whatsapp { background-color: #25D366; }
+        .fab-up { background-color: var(--brand-black); opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+        .fab-up.visible { opacity: 1; pointer-events: auto; }
+
+        /* Animations */
+        .anim-slide-down { animation: slideDown 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; opacity: 0; }
+        .anim-fade-up { animation: fadeUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; opacity: 0; transform: translateY(20px); }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+
     </style>
 </head>
 <body class="antialiased min-h-screen flex flex-col">
 
-    <!-- Premium Header -->
-    <header class="bg-[#1a1a1a] text-white pt-8 pb-6 rounded-b-[2.5rem] shadow-xl relative z-30 flex-shrink-0">
+    <!-- Loading Screen -->
+    <div id="appLoader">
+        <div class="loader-logo">PAM</div>
+        <div class="text-[#C5A059] text-sm tracking-[0.4em] uppercase mt-2">Premium Hotel</div>
+        <div class="loader-spinner"></div>
+    </div>
+
+    <!-- Header -->
+    <header class="bg-gradient-to-br from-gray-900 via-[#1a1a1a] to-gray-800 text-white pt-5 pb-5 rounded-b-[2rem] shadow-2xl relative z-30 flex-shrink-0 border-b border-[#333]">
         <div class="px-6 text-center">
-            <div class="inline-block border-b border-[#C5A059] pb-1 mb-2">
-                <p class="text-[10px] tracking-[0.3em] uppercase text-[#C5A059] font-semibold">PAM Premium Hotel</p>
+            <!-- Pulsing Open Status -->
+            <div class="absolute top-4 right-6 flex items-center gap-1.5 opacity-80">
+                <span class="relative flex h-2 w-2">
+                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                  <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                </span>
+                <span class="text-[9px] font-bold tracking-wider uppercase text-green-400">Open Now</span>
             </div>
-            <h1 class="text-4xl font-bold font-serif text-white tracking-wide">Arab Ino</h1>
-            <p class="text-xs text-gray-400 mt-1 italic font-serif">Fine Dining Restaurant</p>
+
+            <div class="inline-block border-b border-[#C5A059] pb-0.5 mb-1.5 opacity-90 cursor-pointer" onclick="handleCategoryClick(null, 'hotel-info')">
+                <p class="text-[9px] tracking-[0.3em] uppercase text-[#C5A059] font-bold">PAM Premium Hotel</p>
+            </div>
+            <h1 class="text-3xl font-bold font-serif text-white tracking-wide mb-0.5 text-gold-gradient">Arab Ino</h1>
+            <p class="text-[11px] text-gray-400 italic font-serif tracking-wide">Fine Dining Restaurant</p>
         </div>
         
-        <!-- Search Bar with Clear Button -->
-        <div class="px-6 mt-6">
+        <!-- Controls Row -->
+        <div class="px-5 mt-4 space-y-4">
+            <!-- Search -->
             <div class="relative group">
                 <span class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                    <i class="fas fa-search text-gray-500 text-sm group-focus-within:text-[#C5A059] transition-colors"></i>
+                    <i class="fas fa-search text-gray-400 text-sm group-focus-within:text-[#C5A059] transition-colors"></i>
                 </span>
-                <input type="text" id="searchInput" placeholder="Search for dishes..." 
-                    class="w-full pl-11 pr-10 py-3.5 rounded-2xl bg-[#2a2a2a] border border-[#333] text-white placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-[#C5A059] text-base transition-all shadow-inner">
-                
-                <!-- Clear Button (Hidden by default) -->
-                <button id="clearSearch" class="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-500 hover:text-white hidden">
-                    <i class="fas fa-times-circle"></i>
+                <input type="text" id="searchInput" placeholder="Find dish (e.g. Paneer)" 
+                    class="w-full pl-10 pr-10 py-3 rounded-xl bg-white/10 border border-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#C5A059] focus:bg-white/15 text-sm transition-all shadow-inner">
+                <button id="clearSearch" class="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-white hidden transition-colors">
+                    <i class="fas fa-times-circle text-sm"></i>
                 </button>
+            </div>
+
+            <!-- Veg Toggle -->
+            <div class="flex items-center justify-between bg-white/5 p-3 rounded-xl border border-white/10">
+                <span class="text-sm font-medium text-gray-300 flex items-center gap-2">
+                    <i class="fas fa-leaf text-green-500"></i> Veg Only Mode
+                </span>
+                <div class="relative inline-block w-10 align-middle select-none transition duration-200 ease-in">
+                    <input type="checkbox" name="toggle" id="vegToggle" class="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 appearance-none cursor-pointer border-gray-300 transition-all duration-300"/>
+                    <label for="vegToggle" class="toggle-label block overflow-hidden h-5 rounded-full bg-gray-600 cursor-pointer"></label>
+                </div>
             </div>
         </div>
     </header>
 
-    <!-- Category Navigation (Sticky) -->
-    <nav class="sticky top-0 z-40 bg-[#faf9f6]/95 backdrop-blur-md pt-3 pb-3 border-b border-gray-200 shadow-sm">
-        <div class="flex overflow-x-auto gap-2 px-4 no-scrollbar items-center" id="categoryNav">
+    <!-- Nav with stronger blur -->
+    <nav class="sticky top-0 z-40 pt-4 pb-4 border-b border-gray-100/50 shadow-sm">
+        <div class="flex overflow-x-auto gap-3 px-4 no-scrollbar items-center" id="categoryNav">
             <!-- Categories Injected Here -->
         </div>
     </nav>
 
-    <!-- Menu List Container -->
-    <main id="menuContainer" class="px-4 py-6 space-y-6 max-w-md mx-auto flex-grow">
+    <!-- Menu List -->
+    <main id="menuContainer" class="px-4 py-5 space-y-5 max-w-md mx-auto flex-grow min-h-[60vh]">
         <!-- Menu Items Injected Here -->
     </main>
 
-    <!-- Footer Space (For aesthetics) -->
-    <div class="py-4 text-center">
-        <p class="text-[10px] text-gray-300 uppercase tracking-widest">Taste of Luxury</p>
+    <!-- Footer Space -->
+    <div id="footerLegend" class="py-8 text-center opacity-70 border-t border-gray-200 mt-4 mx-6 hidden">
+        <div class="flex justify-center gap-4 text-[10px] text-gray-500 mb-3 uppercase tracking-wider">
+            <span class="flex items-center gap-1"><div class="w-2 h-2 bg-green-600 rounded-full"></div> Veg</span>
+            <span class="flex items-center gap-1"><div class="w-2 h-2 bg-red-600 rounded-full"></div> Non-Veg</span>
+            <span class="flex items-center gap-1"><i class="fas fa-pepper-hot text-red-500 text-xs"></i> Spicy</span>
+        </div>
+        <p class="text-[10px] text-gray-400 uppercase tracking-[0.2em] font-serif">Taste of Luxury</p>
+    </div>
+
+    <!-- Floating Buttons -->
+    <div class="fab-container">
+        <button id="scrollToTop" class="fab-btn fab-up" title="Back to Top">
+            <i class="fas fa-chevron-up"></i>
+        </button>
+        <a href="whatsapp://send?text=Check out the menu for Arab Ino at PAM Premium Hotel!" class="fab-btn fab-whatsapp" title="Share Menu">
+            <i class="fab fa-whatsapp text-2xl"></i>
+        </a>
     </div>
 
     <script>
-        // --- DATA CONFIGURATION ---
+        // --- CONFIG ---
         const categories = [
-            { id: 'all', name: 'All Menu' },
-            { id: 'breakfast', name: 'Breakfast' },
-            { id: 'sandwiches', name: 'Sandwiches' },
-            { id: 'starters', name: 'Starters' },
-            { id: 'soup', name: 'Soup & Salad' },
-            { id: 'main-indian', name: 'Indian Mains' },
-            { id: 'main-intl', name: 'Global Mains' },
-            { id: 'rice-bread', name: 'Rice & Breads' },
-            { id: 'dessert', name: 'Desserts' },
-            { id: 'beverages', name: 'Beverages' },
-            { id: 'midnight', name: 'Midnight Meal' }
+            { id: 'hotel-info', name: 'Hotel Info', icon: 'fa-hotel' }, // FIRST TAB
+            { id: 'all', name: 'All Menu', icon: 'fa-list' },
+            { id: 'breakfast', name: 'Breakfast', icon: 'fa-mug-hot' },
+            { id: 'sandwiches', name: 'Sandwich', icon: 'fa-bread-slice' },
+            { id: 'starters', name: 'Starters', icon: 'fa-utensils' },
+            { id: 'soup', name: 'Soup', icon: 'fa-bowl-rice' },
+            { id: 'main-indian', name: 'Indian', icon: 'fa-pepper-hot' },
+            { id: 'main-intl', name: 'Global', icon: 'fa-earth-americas' },
+            { id: 'rice-bread', name: 'Rice', icon: 'fa-box-open' },
+            { id: 'dessert', name: 'Sweet', icon: 'fa-ice-cream' },
+            { id: 'beverages', name: 'Drinks', icon: 'fa-glass-water' },
+            { id: 'midnight', name: 'Midnight', icon: 'fa-moon' }
         ];
 
-        // Extracted Data (Fixed Typos)
         const menuData = [
             // === BREAKFAST ===
-            { category: 'breakfast', name: "Cereals with Milk", desc: "Choice: Corn Flakes/Choco Flakes/Muesli; Served with hot or cold milk", price: 225, kcal: 214, type: 'veg' },
-            { category: 'breakfast', name: "Toast Butter & Preserves", desc: "2 slices of toasted bread served with butter and marmalade", price: 225, kcal: 234, type: 'veg' },
-            { category: 'breakfast', name: "Egg White Scrambled", desc: "4 Eggs White. Accompanied by slice of bread and butter", price: 325, kcal: 218, type: 'egg' },
-            { category: 'breakfast', name: "Egg White Omelette", desc: "4 Eggs White. Masala or Plain served with grilled tomato", price: 325, kcal: 123, type: 'egg' },
-            { category: 'breakfast', name: "Omelette (2 Eggs)", desc: "Masala/Plain/Cheese/Mushroom accompanied by tomato grill", price: 275, kcal: 197, type: 'egg' },
-            { category: 'breakfast', name: "Bread Omelette", desc: "Bread covered with masala/plain omelette served with tomato grill", price: 275, kcal: 317, type: 'egg' },
-            { category: 'breakfast', name: "Fried Egg", desc: "Sunny side up/both side fried. Accompanied by 2 slice toast", price: 275, kcal: 289, type: 'egg' },
-            { category: 'breakfast', name: "Puri with Bhaji", desc: "Home style potato and peas curry served with 3 pieces of puri", price: 275, kcal: 1055, type: 'veg' },
-            { category: 'breakfast', name: "Chole Bhature", desc: "Delhi Street style chole served with 2 pieces of bhatura", price: 275, kcal: 1295, type: 'veg' },
-            { category: 'breakfast', name: "Stuffed Tawa Paratha", desc: "Potato / Paneer / Cauliflower. Served with curd and pickle", price: 275, kcal: 574, type: 'veg' },
-            { category: 'breakfast', name: "Dosa", desc: "Masala/Plain/Mysore/Ghee Served with Sambhar & Chutney", price: 275, kcal: 458, type: 'veg' },
-            { category: 'breakfast', name: "Uttapam", desc: "Plain/Masala served with sambhar & chutney", price: 225, kcal: 317, type: 'veg' },
-            { category: 'breakfast', name: "Idli", desc: "Steamed rice dumplings, served with sambhar & chutney", price: 265, kcal: 265, type: 'veg' },
-            { category: 'breakfast', name: "Upma", desc: "Tomato/Vegetable/Dry Fruit, served with chutney", price: 275, kcal: 275, type: 'veg' },
-            { category: 'breakfast', name: "Poha", desc: "Beaten paddy tempered with mustard seeds, curry leaves", price: 275, kcal: 578, type: 'veg' },
-            { category: 'breakfast', name: "Continental Breakfast", desc: "Juice/Shake, 2 Eggs, Grilled Tomato, Toast, Preserves", price: 375, kcal: 790, type: 'egg' },
-            { category: 'breakfast', name: "South Indian Breakfast", desc: "Juice/Lassi, 2 Idli, 1 Vada, 1 Uttapam, Sambhar, Chutney", price: 375, kcal: 902, type: 'veg' },
-            { category: 'breakfast', name: "North Indian Breakfast", desc: "Juice/Lassi, 2 Puri Bhaji, Poha, 1 Aloo Paratha, Curd", price: 375, kcal: 1104, type: 'veg' },
+            { id: 1, category: 'breakfast', name: "Cereals with Milk", desc: "Choice of Corn Flakes, Choco Flakes, or Muesli.", price: 225, kcal: 214, type: 'veg' },
+            { id: 2, category: 'breakfast', name: "Toast Butter & Preserves", desc: "2 slices of toasted bread served with butter and marmalade", price: 225, kcal: 234, type: 'veg' },
+            { id: 3, category: 'breakfast', name: "Egg White Scrambled", desc: "4 Egg Whites. Accompanied by a slice of bread and butter", price: 325, kcal: 218, type: 'egg' },
+            { id: 4, category: 'breakfast', name: "Egg White Omelette", desc: "4 Egg Whites. Masala or Plain, served with grilled tomato", price: 325, kcal: 123, type: 'egg' },
+            { id: 5, category: 'breakfast', name: "Omelette (2 Eggs)", desc: "Masala, Plain, Cheese, or Mushroom. Served with grilled tomato", price: 275, kcal: 197, type: 'egg' },
+            { id: 6, category: 'breakfast', name: "Bread Omelette", desc: "Bread coated with masala or plain omelette, served with grilled tomato", price: 275, kcal: 317, type: 'egg' },
+            { id: 7, category: 'breakfast', name: "Fried Egg", desc: "Sunny side up or Over Easy. Accompanied by 2 slices of toast", price: 275, kcal: 289, type: 'egg' },
+            { id: 8, category: 'breakfast', name: "Puri with Bhaji", desc: "Homestyle potato and green pea curry served with 3 puris", price: 275, kcal: 1055, type: 'veg' },
+            { id: 9, category: 'breakfast', name: "Chole Bhature", desc: "Delhi-style chickpea curry served with 2 bhaturas", price: 275, kcal: 1295, type: 'veg', bestseller: true },
+            { id: 10, category: 'breakfast', name: "Stuffed Tawa Paratha", desc: "Choice of Potato, Paneer, or Cauliflower. Served with yogurt", price: 275, kcal: 574, type: 'veg' },
+            { id: 11, category: 'breakfast', name: "Dosa", desc: "Masala, Plain, Mysore, or Ghee. Served with Sambhar & Chutney", price: 275, kcal: 458, type: 'veg', bestseller: true },
+            { id: 12, category: 'breakfast', name: "Uttapam", desc: "Plain or Masala, served with Sambhar & Chutney", price: 225, kcal: 317, type: 'veg' },
+            { id: 13, category: 'breakfast', name: "Idli", desc: "Steamed rice dumplings, served with Sambhar & Chutney", price: 265, kcal: 265, type: 'veg' },
+            { id: 14, category: 'breakfast', name: "Upma", desc: "Tomato, Vegetable, or Dry Fruit. Served with chutney", price: 275, kcal: 275, type: 'veg' },
+            { id: 15, category: 'breakfast', name: "Poha", desc: "Flattened rice tempered with mustard seeds and curry leaves", price: 275, kcal: 578, type: 'veg' },
+            { id: 16, category: 'breakfast', name: "Continental Breakfast", desc: "Juice/Shake, 2 Eggs, Grilled Tomato, Toast, Preserves", price: 375, kcal: 790, type: 'egg' },
+            { id: 17, category: 'breakfast', name: "South Indian Breakfast", desc: "Juice/Lassi, 2 Idli, 1 Vada, 1 Uttapam, Sambhar, Chutney", price: 375, kcal: 902, type: 'veg' },
+            { id: 18, category: 'breakfast', name: "North Indian Breakfast", desc: "Juice/Lassi, 2 Puri Bhaji, Poha, 1 Aloo Paratha, Curd", price: 375, kcal: 1104, type: 'veg' },
 
-            // === SANDWICHES & BURGERS ===
-            { category: 'sandwiches', name: "Classic Sandwich Veg", desc: "Coleslaw/Chutney/Veg. Served with french fries", price: 275, kcal: 795, type: 'veg' },
-            { category: 'sandwiches', name: "Classic Sandwich Veg Grilled", desc: "Served with french fries and tomato ketchup", price: 275, kcal: 795, type: 'veg' },
-            { category: 'sandwiches', name: "PAM Premium Club House Veg", desc: "Double layer, lettuce, cheese & veg. Served with fries", price: 375, kcal: 1086, type: 'veg' },
-            { category: 'sandwiches', name: "Kolkata Kathi Roll Veg/Paneer", desc: "Roomali roti stuffed with paneer, vegetable & tandoori masala", price: 325, kcal: 694, type: 'veg' },
-            { category: 'sandwiches', name: "Veg Burger", desc: "Veg pattice stuffed burger served with french fries", price: 325, kcal: 507, type: 'veg' },
-            { category: 'sandwiches', name: "Chicken Kasundi Sandwich", desc: "Stuffed with chicken kasundi, served with french fries", price: 375, kcal: 665, type: 'non-veg' },
-            { category: 'sandwiches', name: "Classic Sandwich Non-Veg Grilled", desc: "Chicken/Egg stuffing. Served with french fries", price: 375, kcal: 795, type: 'non-veg' },
-            { category: 'sandwiches', name: "Chicken Burger", desc: "Burger made of chicken pattice, served with french fries", price: 375, kcal: 607, type: 'non-veg' },
-            { category: 'sandwiches', name: "Kolkata Kathi Roll Non-Veg", desc: "Roomali roti stuffed with tandoori chicken", price: 375, kcal: 686, type: 'non-veg' },
-            { category: 'sandwiches', name: "Club House Non-Veg", desc: "Triple layer, egg, chicken coleslaw. Served with fries", price: 475, kcal: 911, type: 'non-veg' },
+            // === SANDWICHES ===
+            { id: 19, category: 'sandwiches', name: "Classic Sandwich Veg", desc: "Coleslaw, Chutney, or Veg. Served with french fries", price: 275, kcal: 795, type: 'veg' },
+            { id: 20, category: 'sandwiches', name: "Classic Sandwich Veg Grilled", desc: "Grilled veg sandwich served with french fries and ketchup", price: 275, kcal: 795, type: 'veg' },
+            { id: 21, category: 'sandwiches', name: "PAM Premium Club House Veg", desc: "Double layer with lettuce, cheese & veg. Served with fries", price: 375, kcal: 1086, type: 'veg', bestseller: true },
+            { id: 22, category: 'sandwiches', name: "Kolkata Kathi Roll Veg/Paneer", desc: "Roomali roti stuffed with paneer, vegetables & tandoori spices", price: 325, kcal: 694, type: 'veg', spicy: true },
+            { id: 23, category: 'sandwiches', name: "Veg Burger", desc: "Veg patty burger served with french fries", price: 325, kcal: 507, type: 'veg' },
+            { id: 24, category: 'sandwiches', name: "Chicken Kasundi Sandwich", desc: "Stuffed with chicken in mustard sauce, served with french fries", price: 375, kcal: 665, type: 'non-veg' },
+            { id: 25, category: 'sandwiches', name: "Classic Sandwich Non-Veg Grilled", desc: "Chicken or Egg stuffing. Served with french fries", price: 375, kcal: 795, type: 'non-veg' },
+            { id: 26, category: 'sandwiches', name: "Chicken Burger", desc: "Chicken patty burger served with french fries", price: 375, kcal: 607, type: 'non-veg' },
+            { id: 27, category: 'sandwiches', name: "Kolkata Kathi Roll Non-Veg", desc: "Roomali roti stuffed with tandoori chicken", price: 375, kcal: 686, type: 'non-veg', spicy: true },
+            { id: 28, category: 'sandwiches', name: "Club House Non-Veg", desc: "Triple layer with egg, chicken coleslaw. Served with fries", price: 475, kcal: 911, type: 'non-veg' },
 
             // === STARTERS ===
-            { category: 'starters', name: "French Fries", desc: "Classic / Plain / Peri Peri. Served with dip", price: 225, kcal: 1164, type: 'veg' },
-            { category: 'starters', name: "Pakora", desc: "Onion / Potato / Mix Veg. Served with pudina chutney", price: 275, kcal: 943, type: 'veg' },
-            { category: 'starters', name: "Vegetable Cutlets", desc: "Minced vegetable sauteed and deep fried", price: 275, kcal: 701, type: 'veg' },
-            { category: 'starters', name: "Jalapeno Cheese Ball", desc: "Deep fried, stuffed with jalapeno", price: 325, kcal: 1244, type: 'veg' },
-            { category: 'starters', name: "Cheese & 3 Peppers on Toast", desc: "Cheese chilli toast with bell peppers", price: 325, kcal: 782, type: 'veg' },
-            { category: 'starters', name: "Veg Spring Rolls", desc: "Vegetable stuffed rolls served with hot garlic sauce", price: 325, kcal: 251, type: 'veg' },
-            { category: 'starters', name: "Honey Yogurt Ke Kebab", desc: "Awadhi style yogurt pattie. Served with pudina chutney", price: 375, kcal: 800, type: 'veg' },
-            { category: 'starters', name: "Paneer Angara/Tikka", desc: "Marinated cottage cheese chargrilled", price: 425, kcal: 535, type: 'veg' },
-            { category: 'starters', name: "Vegetable Kebab Platter", desc: "Paneer tikka, Veg seekh, Tandoori aloo, Mushroom", price: 575, kcal: 1072, type: 'veg' },
-            { category: 'starters', name: "Honey Chilli Potatoes", desc: "Tossed in sweet and spicy sauce", price: 225, kcal: null, type: 'veg' },
-            { category: 'starters', name: "Schezwan Crispy Veg", desc: "Crispy fried vegetables tossed with green chilli", price: 225, kcal: 673, type: 'veg' },
-            // Non Veg Starters
-            { category: 'starters', name: "Chicken Nuggets", desc: "Breaded chicken deep fried", price: 425, kcal: 607, type: 'non-veg' },
-            { category: 'starters', name: "Fish N Chips", desc: "Marinated fish fillet coated with crumbs & fried", price: 425, kcal: 907, type: 'non-veg' },
-            { category: 'starters', name: "Bhatti Da Murgh (Half)", desc: "Char grilled chicken (leg & breast) with chutney", price: 350, kcal: 1306, type: 'non-veg' },
-            { category: 'starters', name: "Murgh Malai Tikka", desc: "Chicken in yogurt, cardamom, shahi jeera", price: 425, kcal: 723, type: 'non-veg' },
-            { category: 'starters', name: "Bharwan Tangdi Kebab", desc: "Chicken legs marinated with cheese & yogurt", price: 475, kcal: 599, type: 'non-veg' },
-            { category: 'starters', name: "Gosht Ronake Seekh Kebab", desc: "Minced mutton marinated and chargrilled", price: 475, kcal: 465, type: 'non-veg' },
-            { category: 'starters', name: "Tandoori Prawns", desc: "Prawns marinated with ajwain & yogurt", price: 600, kcal: 600, type: 'non-veg' },
-            { category: 'starters', name: "Fish Finger", desc: "Crispy fried fish with tartar sauce", price: 350, kcal: 582, type: 'non-veg' },
-            { category: 'starters', name: "Golden Fried Prawns", desc: "Batter fried prawns with tartar sauce", price: 600, kcal: 572, type: 'non-veg' },
+            { id: 29, category: 'starters', name: "French Fries", desc: "Classic, Plain, or Peri Peri. Served with dip", price: 225, kcal: 1164, type: 'veg' },
+            { id: 30, category: 'starters', name: "Pakora", desc: "Onion, Potato, or Mix Veg. Served with mint chutney", price: 275, kcal: 943, type: 'veg' },
+            { id: 31, category: 'starters', name: "Vegetable Cutlets", desc: "Minced vegetable patties, crumbed and deep fried", price: 275, kcal: 701, type: 'veg' },
+            { id: 32, category: 'starters', name: "Jalapeno Cheese Ball", desc: "Deep fried cheese balls stuffed with jalapeno", price: 325, kcal: 1244, type: 'veg', spicy: true },
+            { id: 33, category: 'starters', name: "Cheese & 3 Peppers on Toast", desc: "Cheese chilli toast topped with bell peppers", price: 325, kcal: 782, type: 'veg', spicy: true },
+            { id: 34, category: 'starters', name: "Veg Spring Rolls", desc: "Vegetable stuffed rolls served with hot garlic sauce", price: 325, kcal: 251, type: 'veg' },
+            { id: 35, category: 'starters', name: "Honey Yogurt Ke Kebab", desc: "Awadhi style yogurt patty. Served with mint chutney", price: 375, kcal: 800, type: 'veg' },
+            { id: 36, category: 'starters', name: "Paneer Angara/Tikka", desc: "Marinated cottage cheese, chargrilled", price: 425, kcal: 535, type: 'veg', bestseller: true, spicy: true },
+            { id: 37, category: 'starters', name: "Vegetable Kebab Platter", desc: "Assortment of Paneer tikka, Veg seekh, Tandoori aloo", price: 575, kcal: 1072, type: 'veg' },
+            { id: 38, category: 'starters', name: "Honey Chilli Potatoes", desc: "Crispy potatoes tossed in sweet and spicy sauce", price: 225, kcal: null, type: 'veg', spicy: true },
+            { id: 39, category: 'starters', name: "Schezwan Crispy Veg", desc: "Crispy fried vegetables tossed with green chillies", price: 225, kcal: 673, type: 'veg', spicy: true },
+            { id: 40, category: 'starters', name: "Chicken Nuggets", desc: "Breaded chicken bites, deep fried", price: 425, kcal: 607, type: 'non-veg' },
+            { id: 41, category: 'starters', name: "Fish N Chips", desc: "Marinated fish fillet coated with crumbs & fried", price: 425, kcal: 907, type: 'non-veg' },
+            { id: 42, category: 'starters', name: "Bhatti Da Murgh (Half)", desc: "Chargrilled chicken (leg & breast) with chutney", price: 350, kcal: 1306, type: 'non-veg', spicy: true },
+            { id: 43, category: 'starters', name: "Murgh Malai Tikka", desc: "Chicken marinated in yogurt, cardamom, and shahi jeera", price: 425, kcal: 723, type: 'non-veg', bestseller: true },
+            { id: 44, category: 'starters', name: "Bharwan Tangdi Kebab", desc: "Chicken legs stuffed with cheese & yogurt", price: 475, kcal: 599, type: 'non-veg' },
+            { id: 45, category: 'starters', name: "Gosht Ronake Seekh Kebab", desc: "Minced mutton marinated and chargrilled", price: 475, kcal: 465, type: 'non-veg', spicy: true },
+            { id: 46, category: 'starters', name: "Tandoori Prawns", desc: "Prawns marinated with carom seeds (ajwain) & yogurt", price: 600, kcal: 600, type: 'non-veg' },
+            { id: 47, category: 'starters', name: "Fish Finger", desc: "Crispy fried fish fingers with tartar sauce", price: 350, kcal: 582, type: 'non-veg' },
+            { id: 48, category: 'starters', name: "Golden Fried Prawns", desc: "Batter fried prawns served with tartar sauce", price: 600, kcal: 572, type: 'non-veg' },
 
-            // === SOUP & SALAD ===
-            { category: 'soup', name: "Fresh Green Garden Salad", desc: "Slice cut green served on a bed of lettuce", price: 225, kcal: 49, type: 'veg' },
-            { category: 'soup', name: "Fresh Farm Greek Salad", desc: "Crispy veggies, garlic vinaigrette, feta crumble", price: 225, kcal: 105, type: 'veg' },
-            { category: 'soup', name: "Healthy Protein 3 Beans Salad", desc: "Beans sprouts tossed in choice of dressing", price: 225, kcal: 356, type: 'veg' },
-            { category: 'soup', name: "Chicken Smoked Salad", desc: "Smoked chicken tossed with bell pepper", price: 300, kcal: 301, type: 'non-veg' },
-            { category: 'soup', name: "Classical Caesar Salad", desc: "Lettuce, croutons, parmesan, olive oil", price: 250, kcal: 476, type: 'veg' },
-            { category: 'soup', name: "Cream of Tomato Basil Soup", desc: "Creamy soup of plum tomatoes with croutons", price: 225, kcal: 147, type: 'veg' },
-            { category: 'soup', name: "Cream of Broccoli/Almond", desc: "Creamy soup with vegetable stock", price: 250, kcal: 291, type: 'veg' },
-            { category: 'soup', name: "Minestrone Soup", desc: "Tomato base Italian soup with macaroni", price: 225, kcal: 175, type: 'veg' },
-            { category: 'soup', name: "Veg Lemon Coriander Soup", desc: "Refreshing soup with cilantro and lemon", price: 225, kcal: 90, type: 'veg' },
-            { category: 'soup', name: "Veg Manchow Soup", desc: "Indo chinese spicy soup with fried noodles", price: 225, kcal: 102, type: 'veg' },
-            { category: 'soup', name: "Cream of Chicken Soup", desc: "Creamy soup made of chicken stock", price: 275, kcal: 210, type: 'non-veg' },
-            { category: 'soup', name: "Chicken Thukpa Soup", desc: "Traditional spicy Tibetan noodle soup", price: 275, kcal: 493, type: 'non-veg' },
-            { category: 'soup', name: "Chicken Manchow Soup", desc: "Spicy chicken soup with fried noodles", price: 275, kcal: 511, type: 'non-veg' },
+            // === SOUP ===
+            { id: 49, category: 'soup', name: "Fresh Green Garden Salad", desc: "Sliced fresh greens served on a bed of lettuce", price: 225, kcal: 49, type: 'veg' },
+            { id: 50, category: 'soup', name: "Fresh Farm Greek Salad", desc: "Crispy veggies, garlic vinaigrette, feta crumble", price: 225, kcal: 105, type: 'veg' },
+            { id: 51, category: 'soup', name: "Healthy Protein 3 Bean Salad", desc: "Bean sprouts tossed in choice of dressing", price: 225, kcal: 356, type: 'veg' },
+            { id: 52, category: 'soup', name: "Chicken Smoked Salad", desc: "Smoked chicken tossed with bell peppers", price: 300, kcal: 301, type: 'non-veg' },
+            { id: 53, category: 'soup', name: "Classic Caesar Salad", desc: "Lettuce, croutons, parmesan, olive oil", price: 250, kcal: 476, type: 'veg' },
+            { id: 54, category: 'soup', name: "Cream of Tomato Basil Soup", desc: "Creamy soup of plum tomatoes with croutons", price: 225, kcal: 147, type: 'veg' },
+            { id: 55, category: 'soup', name: "Cream of Broccoli/Almond", desc: "Rich creamy soup with vegetable stock", price: 250, kcal: 291, type: 'veg' },
+            { id: 56, category: 'soup', name: "Minestrone Soup", desc: "Tomato base Italian soup with macaroni", price: 225, kcal: 175, type: 'veg' },
+            { id: 57, category: 'soup', name: "Veg Lemon Coriander Soup", desc: "Refreshing soup with coriander and lemon", price: 225, kcal: 90, type: 'veg' },
+            { id: 58, category: 'soup', name: "Veg Manchow Soup", desc: "Indo-Chinese spicy soup topped with fried noodles", price: 225, kcal: 102, type: 'veg', bestseller: true, spicy: true },
+            { id: 59, category: 'soup', name: "Cream of Chicken Soup", desc: "Creamy soup made from rich chicken stock", price: 275, kcal: 210, type: 'non-veg' },
+            { id: 60, category: 'soup', name: "Chicken Thukpa Soup", desc: "Traditional spicy Tibetan noodle soup", price: 275, kcal: 493, type: 'non-veg', spicy: true },
+            { id: 61, category: 'soup', name: "Chicken Manchow Soup", desc: "Spicy chicken soup topped with fried noodles", price: 275, kcal: 511, type: 'non-veg', spicy: true },
 
             // === INDIAN MAINS ===
-            { category: 'main-indian', name: "Bhindi Do Pyaza/Masala", desc: "Lady finger cooked with lots of onion & spices", price: 275, kcal: 604, type: 'veg' },
-            { category: 'main-indian', name: "Kaju Curry", desc: "Golden fried cashew nut cooked in rich gravy", price: 375, kcal: 1336, type: 'veg' },
-            { category: 'main-indian', name: "Methi Malai Mutter", desc: "Fenugreek and peas in rich, mild creamy gravy", price: 275, kcal: 1217, type: 'veg' },
-            { category: 'main-indian', name: "Subz Birbal Ki Handi", desc: "Mix veg in rich onion gravy with special spices", price: 275, kcal: 413, type: 'veg' },
-            { category: 'main-indian', name: "Kashmiri Dum Aloo", desc: "Baby potato simmered in rich Kashmiri gravy", price: 275, kcal: 564, type: 'veg' },
-            { category: 'main-indian', name: "Cheesy Mushroom Mutter", desc: "Mushroom and green peas in cheesy gravy", price: 325, kcal: 509, type: 'veg' },
-            { category: 'main-indian', name: "Paneer Tikka Masala", desc: "Char grilled cottage cheese in spicy gravy", price: 325, kcal: 718, type: 'veg' },
-            { category: 'main-indian', name: "Paneer Lababdar", desc: "Rich, tangy slightly sweet gravy", price: 325, kcal: 422, type: 'veg' },
-            { category: 'main-indian', name: "Chana Masala", desc: "Soft boiled chick peas cooked in Indian spices", price: 275, kcal: 569, type: 'veg' },
-            { category: 'main-indian', name: "Gosht Delhi Ka Korma", desc: "Lamb chunks in slow cooked onion gravy", price: 575, kcal: 570, type: 'non-veg' },
-            { category: 'main-indian', name: "Mutton Rogan Josh", desc: "Traditional Kashmiri spiced mutton curry", price: 575, kcal: 570, type: 'non-veg' },
-            { category: 'main-indian', name: "Murgh Lazeez Saag Wala", desc: "Chicken in aromatic spinach gravy", price: 375, kcal: 484, type: 'non-veg' },
-            { category: 'main-indian', name: "Murgh Shahi Korma", desc: "Chicken in special chef blend gravy", price: 375, kcal: null, type: 'non-veg' },
-            { category: 'main-indian', name: "Murgh Do Pyaza", desc: "Chicken with rich gravy, cashews & vegetables", price: 375, kcal: 1002, type: 'non-veg' },
-            { category: 'main-indian', name: "Butter Chicken", desc: "Boneless chicken in traditional buttery tomato gravy", price: 400, kcal: 610, type: 'non-veg' },
-            { category: 'main-indian', name: "Dum Ki Machhi", desc: "Fish simmered in brown onion gravy (Dum method)", price: 375, kcal: 255, type: 'non-veg' },
+            { id: 62, category: 'main-indian', name: "Bhindi Do Pyaza/Masala", desc: "Okra cooked with plenty of onions & spices", price: 275, kcal: 604, type: 'veg' },
+            { id: 63, category: 'main-indian', name: "Kaju Curry", desc: "Golden fried cashew nuts cooked in rich gravy", price: 375, kcal: 1336, type: 'veg' },
+            { id: 64, category: 'main-indian', name: "Methi Malai Mutter", desc: "Fenugreek and green peas in rich, mild creamy gravy", price: 275, kcal: 1217, type: 'veg' },
+            { id: 65, category: 'main-indian', name: "Subz Birbal Ki Handi", desc: "Mix veg in rich onion gravy with special spices", price: 275, kcal: 413, type: 'veg' },
+            { id: 66, category: 'main-indian', name: "Kashmiri Dum Aloo", desc: "Baby potatoes simmered in rich Kashmiri gravy", price: 275, kcal: 564, type: 'veg' },
+            { id: 67, category: 'main-indian', name: "Cheesy Mushroom Mutter", desc: "Mushrooms and green peas in cheesy gravy", price: 325, kcal: 509, type: 'veg' },
+            { id: 68, category: 'main-indian', name: "Paneer Tikka Masala", desc: "Chargrilled cottage cheese in spicy gravy", price: 325, kcal: 718, type: 'veg', bestseller: true, spicy: true },
+            { id: 69, category: 'main-indian', name: "Paneer Lababdar", desc: "Rich, tangy, slightly sweet gravy", price: 325, kcal: 422, type: 'veg' },
+            { id: 70, category: 'main-indian', name: "Chana Masala", desc: "Soft boiled chickpeas cooked in Indian spices", price: 275, kcal: 569, type: 'veg' },
+            { id: 71, category: 'main-indian', name: "Gosht Delhi Ka Korma", desc: "Lamb chunks in slow-cooked onion gravy", price: 575, kcal: 570, type: 'non-veg' },
+            { id: 72, category: 'main-indian', name: "Mutton Rogan Josh", desc: "Traditional Kashmiri spiced mutton curry", price: 575, kcal: 570, type: 'non-veg', bestseller: true, spicy: true },
+            { id: 73, category: 'main-indian', name: "Murgh Lazeez Saag Wala", desc: "Chicken in aromatic spinach gravy", price: 375, kcal: 484, type: 'non-veg' },
+            { id: 74, category: 'main-indian', name: "Murgh Shahi Korma", desc: "Chicken in special chef's blend gravy", price: 375, kcal: null, type: 'non-veg' },
+            { id: 75, category: 'main-indian', name: "Murgh Do Pyaza", desc: "Chicken with rich gravy, cashews & vegetables", price: 375, kcal: 1002, type: 'non-veg' },
+            { id: 76, category: 'main-indian', name: "Butter Chicken", desc: "Boneless chicken in traditional buttery tomato gravy", price: 400, kcal: 610, type: 'non-veg', bestseller: true },
+            { id: 77, category: 'main-indian', name: "Dum Ki Machhi", desc: "Fish simmered in brown onion gravy (Dum method)", price: 375, kcal: 255, type: 'non-veg' },
 
             // === GLOBAL MAINS ===
-            { category: 'main-intl', name: "Exotic Veg Thai Curry", desc: "Green/Red/Yellow curry with coconut milk", price: 375, kcal: 183, type: 'veg' },
-            { category: 'main-intl', name: "Stir Fried Medley of Veg", desc: "Seasonal vegetables stir fried to perfection", price: 325, kcal: 516, type: 'veg' },
-            { category: 'main-intl', name: "Chilli Paneer Gravy", desc: "Fried paneer in sweet, spicy, sour sauce", price: 325, kcal: 870, type: 'veg' },
-            { category: 'main-intl', name: "Penne Alfredo", desc: "Pasta in creamy parmesan sauce with garlic bread", price: 375, kcal: 706, type: 'veg' },
-            { category: 'main-intl', name: "Penne Arrabiata", desc: "Tomato, garlic, red chilli sauce with garlic bread", price: 375, kcal: 709, type: 'veg' },
-            { category: 'main-intl', name: "Baked Veg", desc: "Exotic veg cooked with cheese sauce", price: 375, kcal: 375, type: 'veg' },
-            { category: 'main-intl', name: "Chicken Thai Curry", desc: "Red/Green/Yellow curry with coconut milk", price: 425, kcal: 743, type: 'non-veg' },
-            { category: 'main-intl', name: "Oriental Chicken", desc: "Hot garlic / Schezwan / Black pepper sauce", price: 475, kcal: 555, type: 'non-veg' },
-            { category: 'main-intl', name: "Grilled Fish Lemon Butter", desc: "Grilled fish with lemon butter & veggies", price: 475, kcal: 446, type: 'non-veg' },
+            { id: 78, category: 'main-intl', name: "Exotic Veg Thai Curry", desc: "Green, Red, or Yellow curry with coconut milk", price: 375, kcal: 183, type: 'veg', spicy: true },
+            { id: 79, category: 'main-intl', name: "Stir Fried Medley of Veg", desc: "Seasonal vegetables stir-fried to perfection", price: 325, kcal: 516, type: 'veg' },
+            { id: 80, category: 'main-intl', name: "Chilli Paneer Gravy", desc: "Fried paneer in sweet, spicy, and sour sauce", price: 325, kcal: 870, type: 'veg', spicy: true },
+            { id: 81, category: 'main-intl', name: "Penne Alfredo", desc: "Pasta in creamy parmesan sauce with garlic bread", price: 375, kcal: 706, type: 'veg' },
+            { id: 82, category: 'main-intl', name: "Penne Arrabiata", desc: "Tomato, garlic, and red chilli sauce with garlic bread", price: 375, kcal: 709, type: 'veg', spicy: true },
+            { id: 83, category: 'main-intl', name: "Baked Veg", desc: "Exotic veg cooked with cheese sauce", price: 375, kcal: 375, type: 'veg' },
+            { id: 84, category: 'main-intl', name: "Chicken Thai Curry", desc: "Red, Green, or Yellow curry with coconut milk", price: 425, kcal: 743, type: 'non-veg', spicy: true },
+            { id: 85, category: 'main-intl', name: "Oriental Chicken", desc: "Hot Garlic, Schezwan, or Black Pepper sauce", price: 475, kcal: 555, type: 'non-veg', spicy: true },
+            { id: 86, category: 'main-intl', name: "Grilled Fish Lemon Butter", desc: "Grilled fish with lemon butter & veggies", price: 475, kcal: 446, type: 'non-veg' },
 
             // === RICE & BREADS ===
-            { category: 'rice-bread', name: "Dal Tadka", desc: "Pigeon peas tempered with cumin and garlic", price: 225, kcal: 684, type: 'veg' },
-            { category: 'rice-bread', name: "Dal Makhani", desc: "Black lentil & kidney beans with butter & cream", price: 325, kcal: 794, type: 'veg' },
-            { category: 'rice-bread', name: "Subz Dum Pukht Biryani", desc: "Vegetable Hyderabadi biryani with raita", price: 300, kcal: 1089, type: 'veg' },
-            { category: 'rice-bread', name: "Jeera Rice", desc: "Steamed rice tempered with cumin seeds", price: 225, kcal: 523, type: 'veg' },
-            { category: 'rice-bread', name: "Hyderabadi Murgh Biryani", desc: "Chicken Dum Biryani served with raita", price: 375, kcal: 1391, type: 'non-veg' },
-            { category: 'rice-bread', name: "Gosht Dum Biryani", desc: "Mutton Dum Biryani served with raita", price: 475, kcal: 674, type: 'non-veg' },
-            { category: 'rice-bread', name: "Fried Rice (Veg)", desc: "Rice stirred in Chinese style", price: 225, kcal: 991, type: 'veg' },
-            { category: 'rice-bread', name: "Veg Hakka Noodles", desc: "Noodles stirred in Chinese style", price: 225, kcal: 1005, type: 'veg' },
-            { category: 'rice-bread', name: "Tandoori Roti", desc: "Whole wheat flour bread (Plain/Butter)", price: 50, kcal: 126, type: 'veg' },
-            { category: 'rice-bread', name: "Naan", desc: "Refined flour bread (Plain/Butter)", price: 50, kcal: 268, type: 'veg' },
-            { category: 'rice-bread', name: "Garlic Naan", desc: "Refined flour bread with chopped garlic", price: 110, kcal: 269, type: 'veg' },
-            { category: 'rice-bread', name: "Cheese Chilli Naan", desc: "Coated with cheese and green chilli", price: 125, kcal: 339, type: 'veg' },
-            { category: 'rice-bread', name: "Kulcha", desc: "Refined flour flat bread topped with sesame", price: 75, kcal: 268, type: 'veg' },
-            { category: 'rice-bread', name: "Roomali Roti", desc: "Thin and soft handkerchief bread", price: 175, kcal: 270, type: 'veg' },
+            { id: 87, category: 'rice-bread', name: "Dal Tadka", desc: "Yellow lentils tempered with cumin and garlic", price: 225, kcal: 684, type: 'veg', bestseller: true },
+            { id: 88, category: 'rice-bread', name: "Dal Makhani", desc: "Black lentils & kidney beans with butter & cream", price: 325, kcal: 794, type: 'veg', bestseller: true },
+            { id: 89, category: 'rice-bread', name: "Subz Dum Pukht Biryani", desc: "Vegetable Hyderabadi biryani with raita", price: 300, kcal: 1089, type: 'veg' },
+            { id: 90, category: 'rice-bread', name: "Jeera Rice", desc: "Steamed rice tempered with cumin seeds", price: 225, kcal: 523, type: 'veg' },
+            { id: 91, category: 'rice-bread', name: "Hyderabadi Murgh Biryani", desc: "Chicken Dum Biryani served with raita", price: 375, kcal: 1391, type: 'non-veg', bestseller: true },
+            { id: 92, category: 'rice-bread', name: "Gosht Dum Biryani", desc: "Mutton Dum Biryani served with raita", price: 475, kcal: 674, type: 'non-veg' },
+            { id: 93, category: 'rice-bread', name: "Fried Rice (Veg)", desc: "Rice stir-fried Chinese style", price: 225, kcal: 991, type: 'veg' },
+            { id: 94, category: 'rice-bread', name: "Veg Hakka Noodles", desc: "Noodles stir-fried Chinese style", price: 225, kcal: 1005, type: 'veg' },
+            { id: 95, category: 'rice-bread', name: "Tandoori Roti", desc: "Whole wheat flour bread (Plain/Butter)", price: 50, kcal: 126, type: 'veg' },
+            { id: 96, category: 'rice-bread', name: "Naan", desc: "Refined flour bread (Plain/Butter)", price: 50, kcal: 268, type: 'veg' },
+            { id: 97, category: 'rice-bread', name: "Garlic Naan", desc: "Refined flour bread with chopped garlic", price: 110, kcal: 269, type: 'veg', bestseller: true },
+            { id: 98, category: 'rice-bread', name: "Cheese Chilli Naan", desc: "Coated with cheese and green chilli", price: 125, kcal: 339, type: 'veg', spicy: true },
+            { id: 99, category: 'rice-bread', name: "Kulcha", desc: "Refined flour flat bread topped with sesame", price: 75, kcal: 268, type: 'veg' },
+            { id: 100, category: 'rice-bread', name: "Roomali Roti", desc: "Thin and soft handkerchief bread", price: 175, kcal: 270, type: 'veg' },
 
             // === DESSERT ===
-            { category: 'dessert', name: "Gulab Jamun", desc: "Deep fried mawa dumplings in chasni (3 pcs)", price: 125, kcal: 668, type: 'veg' },
-            { category: 'dessert', name: "Dry Fruit Moong Dal Halwa", desc: "Moong dal cooked in ghee with dry fruits", price: 150, kcal: 960, type: 'veg' },
-            { category: 'dessert', name: "Kesar Rasmalai", desc: "Saffron flavoured milk dumplings (3 pcs)", price: 225, kcal: 511, type: 'veg' },
-            { category: 'dessert', name: "Rasgulla", desc: "Fresh chenna dumplings in chasni (3 pcs)", price: 275, kcal: 219, type: 'veg' },
-            { category: 'dessert', name: "Fruit Salad", desc: "Seasoned fruits with honey lemon dressing", price: 275, kcal: 171, type: 'veg' },
-            { category: 'dessert', name: "Ice Cream", desc: "2 Scoops (Chocolate, Vanilla, Strawberry, etc)", price: 150, kcal: 62, type: 'veg' },
+            { id: 101, category: 'dessert', name: "Gulab Jamun", desc: "Deep fried mawa dumplings in syrup (3 pcs)", price: 125, kcal: 668, type: 'veg', bestseller: true },
+            { id: 102, category: 'dessert', name: "Dry Fruit Moong Dal Halwa", desc: "Moong dal cooked in ghee with dry fruits", price: 150, kcal: 960, type: 'veg' },
+            { id: 103, category: 'dessert', name: "Kesar Rasmalai", desc: "Saffron flavoured milk dumplings (3 pcs)", price: 225, kcal: 511, type: 'veg' },
+            { id: 104, category: 'dessert', name: "Rasgulla", desc: "Fresh cottage cheese dumplings in syrup (3 pcs)", price: 275, kcal: 219, type: 'veg' },
+            { id: 105, category: 'dessert', name: "Fruit Salad", desc: "Seasoned fruits with honey lemon dressing", price: 275, kcal: 171, type: 'veg' },
+            { id: 106, category: 'dessert', name: "Ice Cream", desc: "2 Scoops (Chocolate, Vanilla, Strawberry, etc)", price: 150, kcal: 62, type: 'veg' },
 
             // === BEVERAGES ===
-            { category: 'beverages', name: "Tea", desc: "Masala / Plain / Ginger", price: 100, kcal: 100, type: 'veg' },
-            { category: 'beverages', name: "Coffee", desc: "Espresso / Cappuccino / Latte", price: 125, kcal: 125, type: 'veg' },
-            { category: 'beverages', name: "Cold Coffee", desc: "Chilled coffee with ice cream & chocolate", price: 175, kcal: 175, type: 'veg' },
-            { category: 'beverages', name: "Milk Shake", desc: "Chocolate / Strawberry / Vanilla / Banana", price: 175, kcal: 175, type: 'veg' },
-            { category: 'beverages', name: "Mango Smoothie", desc: "Frozen mango crush, sweet curd, dry fruits", price: 175, kcal: 175, type: 'veg' },
-            { category: 'beverages', name: "Lassi", desc: "Sweet / Salted creamy yogurt drink", price: 150, kcal: 150, type: 'veg' },
-            { category: 'beverages', name: "Fresh Juice", desc: "Orange / Water Melon / Pineapple", price: 175, kcal: 175, type: 'veg' },
-            { category: 'beverages', name: "Aerated Drinks", desc: "Pepsi / 7Up / Mirinda", price: 75, kcal: 75, type: 'veg' },
-            { category: 'beverages', name: "Red Bull", desc: "Energy Drink", price: 125, kcal: 125, type: 'veg' },
+            { id: 107, category: 'beverages', name: "Tea", desc: "Masala, Plain, or Ginger", price: 100, kcal: 100, type: 'veg' },
+            { id: 108, category: 'beverages', name: "Coffee", desc: "Espresso, Cappuccino, or Latte", price: 125, kcal: 125, type: 'veg' },
+            { id: 109, category: 'beverages', name: "Cold Coffee", desc: "Chilled coffee with ice cream & chocolate", price: 175, kcal: 175, type: 'veg' },
+            { id: 110, category: 'beverages', name: "Milk Shake", desc: "Chocolate, Strawberry, Vanilla, or Banana", price: 175, kcal: 175, type: 'veg' },
+            { id: 111, category: 'beverages', name: "Mix Fruits Smoothie", desc: "Loaded with fruits (strawberry, banana, guava), curd & dry fruits!", price: 175, kcal: 175, type: 'veg' },
+            { id: 112, category: 'beverages', name: "Mango Smoothie", desc: "Frozen mango crush, sweet curd, garnished with dry fruits", price: 175, kcal: 175, type: 'veg' },
+            { id: 113, category: 'beverages', name: "Lassi", desc: "Creamy, yogurt-based beverage from Punjab. Sweet or Salted.", price: 150, kcal: 150, type: 'veg' },
+            { id: 114, category: 'beverages', name: "Butter Milk (Chaass)", desc: "Low-fat fermented dairy drink with lactic acid bacteria", price: 100, kcal: 60, type: 'veg' },
+            { id: 115, category: 'beverages', name: "Hot Chocolate / Bournvita", desc: "Nutritional malt drink with vitamins & minerals (Iron, Calcium, Zinc)", price: 200, kcal: 180, type: 'veg' },
+            { id: 116, category: 'beverages', name: "Fresh Juice", desc: "Orange, Water Melon, Pineapple & Mix Fruit", price: 175, kcal: 175, type: 'veg' },
+            { id: 117, category: 'beverages', name: "Fresh Lime Water / Soda", desc: "Sweet, Salted, or Mix", price: 99, kcal: 40, type: 'veg' },
+            { id: 118, category: 'beverages', name: "Packaged Drinking Water", desc: "Mineral Water Bottle", price: 50, kcal: 0, type: 'veg' },
+            { id: 119, category: 'beverages', name: "Aerated Drinks", desc: "Pepsi, 7Up, Mirinda, or Mountain Dew", price: 75, kcal: 140, type: 'veg' },
+            { id: 120, category: 'beverages', name: "Red Bull", desc: "Energy Drink", price: 125, kcal: 110, type: 'veg' },
 
             // === MIDNIGHT MEAL ===
-            { category: 'midnight', name: "Veg Grilled Sandwich", desc: "With fries, side salad and ketchup", price: 225, kcal: 681, type: 'veg' },
-            { category: 'midnight', name: "Dal Tadka With Rice", desc: "Half dal, half rice, papad, salad", price: 325, kcal: 882, type: 'veg' },
-            { category: 'midnight', name: "Dal Makhani & Paratha", desc: "Half dal makhani, 2 tawa paratha, salad", price: 375, kcal: 917, type: 'veg' },
-            { category: 'midnight', name: "Paneer Butter Masala & Pulao", desc: "Half paneer, half veg pulao, phulka, salad", price: 425, kcal: 1136, type: 'veg' },
-            { category: 'midnight', name: "Mutton Rogan Josh & Paratha", desc: "Half mutton masala, 2 paratha, salad", price: 475, kcal: 982, type: 'non-veg' },
-            { category: 'midnight', name: "Murgh Makhani With Rice", desc: "Half chicken curry, steamed rice, salad", price: 425, kcal: 1067, type: 'non-veg' }
+            { id: 121, category: 'midnight', name: "Veg Grilled Sandwich", desc: "With fries, side salad and ketchup", price: 225, kcal: 681, type: 'veg' },
+            { id: 122, category: 'midnight', name: "Dal Tadka With Rice", desc: "Half dal, half rice, papad, salad", price: 325, kcal: 882, type: 'veg' },
+            { id: 123, category: 'midnight', name: "Dal Makhani & Paratha", desc: "Half dal makhani, 2 tawa parathas, salad", price: 375, kcal: 917, type: 'veg' },
+            { id: 124, category: 'midnight', name: "Paneer Butter Masala & Pulao", desc: "Half paneer, half veg pulao, phulka, salad", price: 425, kcal: 1136, type: 'veg' },
+            { id: 125, category: 'midnight', name: "Mutton Rogan Josh & Paratha", desc: "Half mutton masala, 2 parathas, salad", price: 475, kcal: 982, type: 'non-veg' },
+            { id: 126, category: 'midnight', name: "Murgh Makhani With Rice", desc: "Half chicken curry, steamed rice, salad", price: 425, kcal: 1067, type: 'non-veg' }
         ];
 
-        // --- DOM ELEMENTS & FUNCTIONS ---
+        // --- STATE & DOM ---
+        let isVegMode = false;
+        
         const categoryNav = document.getElementById('categoryNav');
         const container = document.getElementById('menuContainer');
         const searchInput = document.getElementById('searchInput');
         const clearBtn = document.getElementById('clearSearch');
+        const vegToggle = document.getElementById('vegToggle');
+        const scrollToTopBtn = document.getElementById('scrollToTop');
+        const footerLegend = document.getElementById('footerLegend');
+        const loader = document.getElementById('appLoader');
 
         // Initialize
         function init() {
             renderCategories();
-            renderMenu('all');
+            
+            // Set active state
+            document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+            const firstBtn = document.querySelector('.category-btn');
+            if(firstBtn) firstBtn.classList.add('active');
+            
+            // Initial Render
+            renderHotelInfo(true);
+            updateGreeting();
+            
+            // Hide Loader
+            setTimeout(() => {
+                loader.style.opacity = '0';
+                loader.style.visibility = 'hidden';
+            }, 1200);
+            
+            // Scroll Listener
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 300) {
+                    scrollToTopBtn.classList.add('visible');
+                } else {
+                    scrollToTopBtn.classList.remove('visible');
+                }
+            });
+        }
+        
+        function updateGreeting() {
+            const hour = new Date().getHours();
+            let greeting = "Welcome to";
+            if (hour < 12) greeting = "Good Morning,";
+            else if (hour < 18) greeting = "Good Afternoon,";
+            else greeting = "Good Evening,";
+            
+            const greetingEl = document.getElementById('dynamicGreeting');
+            if(greetingEl) greetingEl.innerText = greeting;
         }
 
-        // Render Category Buttons
+        // Render Categories
         function renderCategories() {
             categoryNav.innerHTML = '';
             categories.forEach((cat, index) => {
                 const btn = document.createElement('button');
-                btn.className = `category-btn whitespace-nowrap px-5 py-2.5 rounded-full border bg-white text-gray-700 text-sm font-semibold shadow-sm mx-1 ${index === 0 ? 'active' : ''}`;
-                btn.innerText = cat.name;
-                btn.onclick = (e) => {
-                    handleCategoryClick(e.target, cat.id);
-                };
+                btn.type = 'button';
+                btn.className = `category-btn whitespace-nowrap px-5 py-2.5 rounded-full text-gray-700 text-sm font-semibold shadow-sm mx-1 ${index === 0 ? 'active' : ''}`;
+                btn.innerHTML = `<i class="fas ${cat.icon} text-xs"></i> <span>${cat.name}</span>`;
+                btn.onclick = (e) => handleCategoryClick(e.currentTarget, cat.id);
                 categoryNav.appendChild(btn);
             });
         }
 
         function handleCategoryClick(btn, categoryId) {
             document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            
-            // Clear Search when switching categories for cleaner UX
+            if(btn) {
+                btn.classList.add('active');
+                centerActiveButton(btn); // Center the clicked button
+            } else {
+                if(categoryId === 'hotel-info') {
+                     const first = categoryNav.querySelector('button');
+                     if(first) {
+                         first.classList.add('active');
+                         centerActiveButton(first);
+                     }
+                } else if (categoryId === 'all') {
+                     const allBtn = categoryNav.querySelectorAll('button')[1];
+                     if(allBtn) {
+                         allBtn.classList.add('active');
+                         centerActiveButton(allBtn);
+                     }
+                }
+            }
+
             searchInput.value = '';
             toggleClearBtn(false);
-
-            renderMenu(categoryId);
             
-            // Smooth Scroll to top of Menu Container with a little offset
-            const headerOffset = 180; // Approximate height of header + nav
-            const elementPosition = container.getBoundingClientRect().top;
-            const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-
-            window.scrollTo({
-                top: 0, // Scroll to top of page
-                behavior: "smooth"
-            });
+            if (categoryId === 'hotel-info') {
+                renderHotelInfo(true);
+            } else {
+                renderMenu(categoryId);
+            }
+            window.scrollTo({ top: 0, behavior: "auto" });
         }
 
-        // Render Menu Items
+        function centerActiveButton(btn) {
+            const nav = document.getElementById('categoryNav');
+            const scrollLeft = btn.offsetLeft - (nav.offsetWidth / 2) + (btn.offsetWidth / 2);
+            nav.scrollTo({ left: scrollLeft, behavior: 'smooth' });
+        }
+
+        // Render Menu
         function renderMenu(filter) {
             container.innerHTML = '';
-            let filteredItems = filter === 'all' 
-                ? menuData 
-                : menuData.filter(item => item.category === filter);
+            footerLegend.classList.remove('hidden'); 
+
+            let filteredItems = menuData;
+
+            if (filter !== 'all') {
+                filteredItems = filteredItems.filter(item => item.category === filter);
+            }
+
+            const term = searchInput.value.toLowerCase();
+            if (term) {
+                filteredItems = filteredItems.filter(item => 
+                    item.name.toLowerCase().includes(term) || 
+                    item.desc.toLowerCase().includes(term)
+                );
+            }
+
+            if (isVegMode) {
+                filteredItems = filteredItems.filter(item => item.type === 'veg');
+            }
 
             if (filteredItems.length === 0) {
                 container.innerHTML = `
                     <div class="text-center py-16 text-gray-400 fade-in">
                         <i class="fas fa-utensils text-4xl mb-3 opacity-30"></i>
-                        <p>No items found in this section.</p>
+                        <p>No items found.</p>
                     </div>`;
                 return;
             }
 
-            // Group by category if showing ALL
-            const groups = filter === 'all' 
-                ? groupBy(filteredItems, 'category') 
-                : { [filter]: filteredItems };
-
-            // Sort groups based on our categories array order
+            const groups = groupBy(filteredItems, 'category');
+            
             categories.forEach(cat => {
                 if (groups[cat.id]) {
-                    const sectionTitle = filter === 'all' 
-                        ? `<div class="sticky top-[72px] bg-[#faf9f6] z-20 py-3 mb-2 border-b border-[#C5A059] inline-block w-full">
-                             <h2 class="text-xl font-serif font-bold text-[#1a1a1a] pr-4">${cat.name}</h2>
+                    const sectionTitle = (filter === 'all' && !term) 
+                        ? `<div class="sticky top-[72px] bg-[#fdfbf7] z-20 py-3 mb-2 border-b border-[#C5A059] inline-block w-full">
+                             <h2 class="text-xl font-serif font-bold text-[#1a1a1a] pr-4 flex items-center gap-2">
+                                <i class="fas ${cat.icon} text-sm text-[#C5A059]"></i> ${cat.name}
+                             </h2>
                            </div>` 
                         : '';
 
@@ -390,26 +747,40 @@
                     container.appendChild(section);
                 }
             });
+
+            if (filter === 'all' && !term && !isVegMode) {
+                renderHotelInfo(); 
+            }
         }
 
         function createCard(item) {
-            const iconClass = item.type === 'veg' ? 'veg' : (item.type === 'egg' ? 'egg' : 'non-veg');
-            const kcalDisplay = item.kcal ? `<span class="kcal-badge"><i class="fas fa-fire-alt text-orange-400 text-[10px]"></i> ${item.kcal} kcal</span>` : '';
+            let iconHtml = '';
+            if (item.type === 'veg') iconHtml = `<div class="veg-icon-box"><div class="veg-dot"></div></div>`;
+            else if (item.type === 'egg') iconHtml = `<div class="egg-icon-box"><div class="egg-dot"></div></div>`;
+            else iconHtml = `<div class="nonveg-icon-box"><div class="nonveg-dot"></div></div>`;
+
+            const kcalDisplay = item.kcal ? `<span class="kcal-badge"><i class="fas fa-fire-alt text-[10px]"></i> ${item.kcal} kcal</span>` : '';
+            const bestsellerBadge = item.bestseller ? `<div class="bestseller-badge">Bestseller</div>` : '';
+            const spicyIcon = item.spicy ? `<i class="fas fa-pepper-hot spicy-icon" title="Spicy"></i>` : '';
 
             return `
-                <div class="menu-card rounded-xl p-4 relative overflow-hidden">
+                <div class="menu-card p-4">
+                    ${bestsellerBadge}
                     <div class="flex justify-between items-start gap-3">
                         <div class="flex-1">
                             <div class="flex items-center gap-2 mb-1">
-                                <span class="food-icon ${iconClass}">
-                                    <i class="fas fa-circle" style="font-size: 6px;"></i>
-                                </span>
-                                <h3 class="font-bold text-gray-800 text-lg font-serif leading-tight">${item.name}</h3>
+                                ${iconHtml}
+                                <h3 class="font-bold text-gray-800 text-lg font-serif leading-tight">
+                                    ${item.name} ${spicyIcon}
+                                </h3>
+                                <button onclick="toggleLike(this)" class="like-btn ml-auto focus:outline-none">
+                                    <i class="fas fa-heart text-sm"></i>
+                                </button>
                             </div>
-                            <p class="text-xs text-gray-600 leading-relaxed mb-2 line-clamp-2">${item.desc}</p>
+                            <p class="text-xs text-gray-500 leading-relaxed mb-2 line-clamp-3">${item.desc}</p>
                             ${kcalDisplay}
                         </div>
-                        <div class="flex flex-col items-end pl-2">
+                        <div class="flex flex-col items-end pl-2 pt-6">
                             <span class="text-lg font-bold text-[#C5A059] whitespace-nowrap">₹${item.price}</span>
                         </div>
                     </div>
@@ -417,7 +788,249 @@
             `;
         }
 
-        // Helper: Group Array by Key
+        // Render Hotel Info
+        function renderHotelInfo(isPage = false) {
+            if(isPage) {
+                container.innerHTML = '';
+                footerLegend.classList.add('hidden');
+            }
+
+            const infoDiv = document.createElement('div');
+            infoDiv.className = 'fade-in w-full'; 
+            if (!isPage) infoDiv.style.marginTop = '40px'; 
+
+            infoDiv.innerHTML = `
+                <div class="hotel-hero" style="animation: slideDown 0.8s ease-out">
+                    <p class="text-[10px] tracking-[0.4em] uppercase text-gray-400 mb-3" id="dynamicGreeting">Welcome to</p>
+                    <h2 class="text-4xl font-serif font-bold text-[#C5A059] mb-2 tracking-wide">PAM PREMIUM</h2>
+                    <p class="text-xs tracking-[0.3em] text-gray-300 uppercase">Hotel & Restaurant</p>
+                </div>
+
+                <div class="action-grid" style="animation: fadeUp 0.6s ease-out 0.2s backwards">
+                    <a href="tel:02652368888" class="action-btn">
+                        <i class="fas fa-phone-alt action-icon"></i>
+                        <span class="text-xs font-bold text-gray-700">Call Us</span>
+                    </a>
+                    <a href="https://www.hotel.pamhotelsindia.com" target="_blank" class="action-btn">
+                        <i class="fas fa-globe action-icon"></i>
+                        <span class="text-xs font-bold text-gray-700">Website</span>
+                    </a>
+                    <a href="https://maps.google.com/?q=PAM+Premium+Hotel+Vadodara" target="_blank" class="action-btn">
+                        <i class="fas fa-map-marked-alt action-icon"></i>
+                        <span class="text-xs font-bold text-gray-700">Directions</span>
+                    </a>
+                </div>
+
+                <div class="mb-6" style="animation: fadeUp 0.6s ease-out 0.25s backwards">
+                    <p class="text-xs font-bold text-gray-400 mb-3 uppercase tracking-wide pl-4">Highlights</p>
+                    <div class="highlights-scroll">
+                        <div class="highlight-pill"><i class="fas fa-wifi"></i> Free Wifi</div>
+                        <div class="highlight-pill"><i class="fas fa-car"></i> Valet Parking</div>
+                        <div class="highlight-pill"><i class="fas fa-clock"></i> 24/7 Service</div>
+                        <div class="highlight-pill"><i class="fas fa-concierge-bell"></i> Room Service</div>
+                        <div class="highlight-pill"><i class="fas fa-snowflake"></i> Fully AC</div>
+                    </div>
+                </div>
+
+                <a href="tel:02652368888" class="book-cta" style="animation: fadeUp 0.6s ease-out 0.3s backwards">
+                    <i class="fas fa-calendar-check"></i> Book A Table
+                </a>
+
+                <div class="mb-8 px-2" style="animation: fadeUp 0.6s ease-out 0.35s backwards">
+                    <h3 class="section-heading">World Class Amenities</h3>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="facility-item">
+                            <i class="fas fa-bed text-2xl text-[#C5A059] mb-2 block opacity-90"></i>
+                            <div class="text-sm font-bold text-gray-800">60 Rooms</div>
+                            <div class="text-[10px] text-gray-400 uppercase tracking-wide">Luxury Stay</div>
+                        </div>
+                        <div class="facility-item">
+                            <i class="fas fa-glass-cheers text-2xl text-[#C5A059] mb-2 block opacity-90"></i>
+                            <div class="text-sm font-bold text-gray-800">02 Banquets</div>
+                            <div class="text-[10px] text-gray-400 uppercase tracking-wide">Celebrations</div>
+                        </div>
+                        <div class="facility-item">
+                            <i class="fas fa-utensils text-2xl text-[#C5A059] mb-2 block opacity-90"></i>
+                            <div class="text-sm font-bold text-gray-800">01 Restaurant</div>
+                            <div class="text-[10px] text-gray-400 uppercase tracking-wide">Fine Dining</div>
+                        </div>
+                        <div class="facility-item">
+                            <i class="fas fa-dumbbell text-2xl text-[#C5A059] mb-2 block opacity-90"></i>
+                            <div class="text-sm font-bold text-gray-800">01 Gym</div>
+                            <div class="text-[10px] text-gray-400 uppercase tracking-wide">Fitness Center</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-8 px-2" style="animation: fadeUp 0.6s ease-out 0.4s backwards">
+                    <h3 class="section-heading">Explore Vadodara</h3>
+                    
+                    <p class="text-xs font-bold text-gray-400 mb-3 uppercase tracking-wide pl-2 mt-4">Transport</p>
+                    <div class="landmark-card">
+                        <div class="flex items-center gap-4">
+                            <span class="text-2xl w-8 text-center">✈️</span>
+                            <div>
+                                <div class="text-sm font-bold text-gray-800">Airport</div>
+                                <div class="text-[10px] text-gray-500">International</div>
+                            </div>
+                        </div>
+                        <span class="dist-badge">06 km</span>
+                    </div>
+                    <div class="landmark-card">
+                        <div class="flex items-center gap-4">
+                            <span class="text-2xl w-8 text-center">🚆</span>
+                            <div>
+                                <div class="text-sm font-bold text-gray-800">Railway Station</div>
+                                <div class="text-[10px] text-gray-500">Vadodara Jn</div>
+                            </div>
+                        </div>
+                        <span class="dist-badge">800 m</span>
+                    </div>
+                    <div class="landmark-card">
+                        <div class="flex items-center gap-4">
+                            <span class="text-2xl w-8 text-center">🚌</span>
+                            <div>
+                                <div class="text-sm font-bold text-gray-800">GSRCT Bus Depot</div>
+                                <div class="text-[10px] text-gray-500">Central Bus Station</div>
+                            </div>
+                        </div>
+                        <span class="dist-badge">900 m</span>
+                    </div>
+
+                    <p class="text-xs font-bold text-gray-400 mb-3 uppercase tracking-wide pl-2 mt-6">Culture & Leisure</p>
+                    <div class="landmark-card">
+                        <div class="flex items-center gap-4">
+                            <span class="text-2xl w-8 text-center">🏛️</span>
+                            <div>
+                                <div class="text-sm font-bold text-gray-800">Laxmi Vilas Palace</div>
+                                <div class="text-[10px] text-gray-500">Royal Heritage</div>
+                            </div>
+                        </div>
+                        <span class="dist-badge">2.6 km</span>
+                    </div>
+                    <div class="landmark-card">
+                        <div class="flex items-center gap-4">
+                            <span class="text-2xl w-8 text-center">🦁</span>
+                            <div>
+                                <div class="text-sm font-bold text-gray-800">Sayaji Baug Zoo</div>
+                                <div class="text-[10px] text-gray-500">Garden & Zoo</div>
+                            </div>
+                        </div>
+                        <span class="dist-badge">900 m</span>
+                    </div>
+                    <div class="landmark-card">
+                        <div class="flex items-center gap-4">
+                            <span class="text-2xl w-8 text-center">🖼️</span>
+                            <div>
+                                <div class="text-sm font-bold text-gray-800">Baroda Museum</div>
+                                <div class="text-[10px] text-gray-500">Picture Gallery</div>
+                            </div>
+                        </div>
+                        <span class="dist-badge">850 m</span>
+                    </div>
+                    <div class="landmark-card">
+                        <div class="flex items-center gap-4">
+                            <span class="text-2xl w-8 text-center">🎨</span>
+                            <div>
+                                <div class="text-sm font-bold text-gray-800">Maharaja Fatehsinh Museum</div>
+                                <div class="text-[10px] text-gray-500">Art & Culture</div>
+                            </div>
+                        </div>
+                        <span class="dist-badge">03 km</span>
+                    </div>
+                    <div class="landmark-card">
+                        <div class="flex items-center gap-4">
+                            <span class="text-2xl w-8 text-center">🕉️</span>
+                            <div>
+                                <div class="text-sm font-bold text-gray-800">Sursagar Shiv Statue</div>
+                                <div class="text-[10px] text-gray-500">Biggest Statue</div>
+                            </div>
+                        </div>
+                        <span class="dist-badge">2.2 km</span>
+                    </div>
+
+                    <p class="text-xs font-bold text-gray-400 mb-3 uppercase tracking-wide pl-2 mt-6">Shopping</p>
+                    <div class="landmark-card">
+                        <div class="flex items-center gap-4">
+                            <span class="text-2xl w-8 text-center">🛍️</span>
+                            <div>
+                                <div class="text-sm font-bold text-gray-800">Inorbit Mall</div>
+                                <div class="text-[10px] text-gray-500">Shopping & Cinema</div>
+                            </div>
+                        </div>
+                        <span class="dist-badge">3.2 km</span>
+                    </div>
+
+                    <p class="text-xs font-bold text-gray-400 mb-3 uppercase tracking-wide pl-2 mt-6">Excursions</p>
+                    <div class="landmark-card">
+                        <div class="flex items-center gap-4">
+                            <span class="text-2xl w-8 text-center">🏰</span>
+                            <div>
+                                <div class="text-sm font-bold text-gray-800">Champaner Fort</div>
+                                <div class="text-[10px] text-gray-500">Pavagadh Heritage</div>
+                            </div>
+                        </div>
+                        <span class="dist-badge">48 km</span>
+                    </div>
+                    <div class="landmark-card">
+                        <div class="flex items-center gap-4">
+                            <span class="text-2xl w-8 text-center">🙏</span>
+                            <div>
+                                <div class="text-sm font-bold text-gray-800">Mata Temple</div>
+                                <div class="text-[10px] text-gray-500">Pavagadh</div>
+                            </div>
+                        </div>
+                        <span class="dist-badge">52.8 km</span>
+                    </div>
+                    <div class="landmark-card">
+                        <div class="flex items-center gap-4">
+                            <span class="text-2xl w-8 text-center">🏞️</span>
+                            <div>
+                                <div class="text-sm font-bold text-gray-800">Hathani Mata</div>
+                                <div class="text-[10px] text-gray-500">Waterfall</div>
+                            </div>
+                        </div>
+                        <span class="dist-badge">79 km</span>
+                    </div>
+                </div>
+
+                <div class="bg-[#1a1a1a] rounded-2xl p-8 text-center text-white mx-2 mb-6" style="animation: fadeUp 0.6s ease-out 0.5s backwards">
+                    <p class="text-[10px] tracking-widest text-gray-400 uppercase mb-3">Visit Us</p>
+                    <p class="text-sm font-medium leading-relaxed text-gray-300">
+                        Opp. Suraj Plaza, Sarod, Sayajigunj<br>
+                        Vadodara, Gujarat 390 007
+                    </p>
+                    <div class="mt-6 pt-6 border-t border-gray-800">
+                         <a href="tel:02652368888" class="text-base font-bold text-[#C5A059] hover:text-white transition-colors"><i class="fas fa-phone-alt mr-2"></i>0265-236 8888</a>
+                    </div>
+                </div>
+            `;
+            container.appendChild(infoDiv);
+            
+            // Trigger dynamic greeting update if we just rendered the page
+            updateGreeting();
+        }
+
+        window.toggleLike = function(btn) {
+            btn.classList.toggle('liked');
+            btn.style.transform = 'scale(1.2)';
+            setTimeout(() => btn.style.transform = 'scale(1)', 200);
+        }
+
+        vegToggle.addEventListener('change', (e) => {
+            isVegMode = e.target.checked;
+            const activeId = document.querySelector('.category-btn.active')?.innerText;
+            if(activeId === 'Hotel Info') {
+                handleCategoryClick(null, 'all');
+            } else {
+                renderMenu('all');
+            }
+        });
+
+        scrollToTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
         function groupBy(xs, key) {
             return xs.reduce(function(rv, x) {
                 (rv[x[key]] = rv[x[key]] || []).push(x);
@@ -425,52 +1038,32 @@
             }, {});
         }
 
-        // Search Logic
         function toggleClearBtn(show) {
-            if(show) {
-                clearBtn.classList.remove('hidden');
-            } else {
-                clearBtn.classList.add('hidden');
-            }
+            if(show) clearBtn.classList.remove('hidden');
+            else clearBtn.classList.add('hidden');
         }
 
         searchInput.addEventListener('input', (e) => {
-            const term = e.target.value.toLowerCase();
-            document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
-            
+            const term = e.target.value;
             toggleClearBtn(term.length > 0);
             
-            if (!term) {
-                document.querySelector('.category-btn').classList.add('active'); // Reset to All
+            if(term.length > 0) {
+                document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+                const allBtn = categoryNav.querySelectorAll('button')[1];
+                if(allBtn) {
+                    allBtn.classList.add('active');
+                    centerActiveButton(allBtn);
+                }
                 renderMenu('all');
-                return;
             }
-
-            container.innerHTML = '';
-            const matches = menuData.filter(item => 
-                item.name.toLowerCase().includes(term) || 
-                item.desc.toLowerCase().includes(term)
-            );
-
-            if (matches.length === 0) {
-                container.innerHTML = `
-                    <div class="text-center py-12 text-gray-400 fade-in">
-                        <p>No results for "${e.target.value}"</p>
-                    </div>`;
-                return;
-            }
-
-            const itemsHtml = matches.map(item => createCard(item)).join('');
-            container.innerHTML = `<div class="space-y-4 fade-in">${itemsHtml}</div>`;
         });
 
         clearBtn.addEventListener('click', () => {
             searchInput.value = '';
             toggleClearBtn(false);
-            document.querySelector('.category-btn').click(); // Reset to All
+            renderMenu('all');
         });
 
-        // Start
         init();
 
     </script>
